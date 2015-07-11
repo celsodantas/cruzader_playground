@@ -7,23 +7,30 @@ describe Actor do
   describe "marriage" do
 
     it "should decide to marry someone if he is single and marriable" do
-      @actor = Actor::Builder.new(age: MarriageHelper::MINIMUM_MARRY_AGE, sex: ActorSex.new(:male)).build
+      context = Context.new(actor_repository: ActorRepository)
 
-      context = Context.new(actor_repository: ActorRepository.new)
-      decisions = @actor.make_decisions(context)
+      actor = Actor.new(params:{age: MarriageHelper::MINIMUM_MARRY_AGE, sex: ActorSex.new(:male)})
+      ActorRepository.save(actor)
+
+      suggested_spouse = Actor.new
+      ActorRepository.save(suggested_spouse)
+
+      MarriageHelper.expects(:find_partner_for).with(actor, context).returns(suggested_spouse)
+
+      decisions = actor.make_decisions(context)
 
       assert_equal 1, decisions.size
-      assert_equal [1, :marry_to, @actor.id], decisions[0]
+      assert_equal [actor.id, :marry_to, suggested_spouse.id], decisions[0]
     end
 
-    it "should" do
-      @actor = Actor::Builder.new(age: MarriageHelper::MINIMUM_MARRY_AGE-1, sex: ActorSex.new(:male)).build
+    it "should not decide to marry if under minimum marry age" do
+      actor = Actor.new(params: {age: MarriageHelper::MINIMUM_MARRY_AGE-1, sex: ActorSex.new(:male)})
+      ActorRepository.save(actor)
 
-      context = Context.new(actor_repository: ActorRepository.new)
-      decisions = @actor.make_decisions(context)
+      context = Context.new(actor_repository: ActorRepository)
+      decisions = actor.make_decisions(context)
 
       assert_equal 0, decisions.size
     end
-
   end
 end

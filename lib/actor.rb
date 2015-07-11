@@ -1,7 +1,10 @@
+require_relative "actor_repository"
+
 class Actor
   attr_accessor :id, :age, :partner, :sex
+  attr_accessor :marriage_helper
 
-  def initialize(params = {})
+  def initialize(params: {}, marriage_helper: MarriageHelper)
     self.age = params[:age]
     self.partner = params[:partner]
     self.sex = params[:sex]
@@ -19,17 +22,6 @@ class Actor
   end
 
   def needs_marriage
-  end
-end
-
-class Actor::Builder
-
-  def initialize(params = {})
-    @actor = Actor.new(params)
-  end
-
-  def build
-    @actor
   end
 end
 
@@ -59,12 +51,6 @@ class ActorSex
     else
       :male
     end
-  end
-end
-
-class ActorRepository
-  def where(params = {})
-    [Actor.new]
   end
 end
 

@@ -21,8 +21,11 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     lumberjack (1.0.9)
+    metaclass (0.0.4)
     method_source (0.8.2)
     minitest (5.7.0)
+    mocha (1.1.0)
+      metaclass (~> 0.0.1)
     nenv (0.2.0)
     notiffany (0.0.6)
       nenv (~> 0.1)
@@ -44,4 +47,5 @@ PLATFORMS
 DEPENDENCIES
   guard
   guard-minitest
+  mocha
   rb-fsevent
